@@ -18,6 +18,7 @@
 
 import argparse
 import os
+import json
 
 import numpy as np
 
@@ -87,6 +88,8 @@ def main():
     parser.add_argument('--vol_dec', default=False, type=str2bool)
     parser.add_argument('--cuda', default=True, type=str2bool)
     parser.add_argument('--sdf_remain_terms', default='1234')
+    parser.add_argument('--testing_shape_codes_file', default='sequential_testing_shape_codes_96_type_2000_80_num_rand.npy')
+    parser.add_argument('--output_file', default='output.json')
     args = parser.parse_args()
 
     # Initialize environment and task.
@@ -116,6 +119,7 @@ def main():
     avg_pyramidality = 0.0
     avg_time = 0.0
     avg_volume = 0.0
+    output = []
     for shape_code_idx in range(args.split*args.case_cnt, (args.split+1)*args.case_cnt): #[782, 628, 912, 499, 304, 477, 310, 820, 97, 605, 233, 951, 510]:
         start_ = time.time()
         print ()
@@ -125,7 +129,7 @@ def main():
 
         # Loading objects
         tot_obj_num = 80 #
-        shape_codes = np.load('sequential_testing_shape_codes_96_type_2000_80_num_rand.npy')[shape_code_idx][0:tot_obj_num] #np.load('shape_codes_96_type_500_num_rand.npy')[shape_code_idx][0:tot_obj_num] #np.load('shape_codes_5_type_80_num_rand.npy')[shape_code_idx][0:tot_obj_num]
+        shape_codes = np.load(args.testing_shape_codes_file)[shape_code_idx][0:tot_obj_num] #np.load('shape_codes_96_type_500_num_rand.npy')[shape_code_idx][0:tot_obj_num] #np.load('shape_codes_5_type_80_num_rand.npy')[shape_code_idx][0:tot_obj_num]
         train_data_save_dict = []
         max_num_vertices = 0
         max_num_faces = 0
@@ -178,5 +182,20 @@ def main():
         print ('average_time_per_obj', avg_time/(shape_code_idx+1-args.case_cnt*args.split)*args.case_cnt)
         print ('average_volume', avg_volume/(shape_code_idx+1-args.case_cnt*args.split)*args.case_cnt)
 
+        output.append([])
+        for i, id in enumerate(env.obj_ids['rigid']):
+            pos, orn = p.getBasePositionAndOrientation(id)
+            output[-1].append({
+                'id': id,
+                'pos': pos,
+                'orn': orn,
+                'type': p.getBodyInfo(id)[1].decode('UTF-8'),
+                'shape_code': int(shape_codes[i])
+            })
+    with open(args.output_file, "w") as f:
+        json.dump(output, f, indent=4)
+
 if __name__ == '__main__':
   main()
+
+# TODO: modify environment.yml with current versions mentioned

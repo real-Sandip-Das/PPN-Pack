@@ -1,0 +1,4 @@
+trained_checkpoints
+__pycache__
+autostore
+output*.json
