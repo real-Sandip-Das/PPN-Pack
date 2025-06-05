@@ -2,3 +2,5 @@ trained_checkpoints
 __pycache__
 autostore
 output*.json
+testing_shape_codes*.npy
+*.urdf.*
