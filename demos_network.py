@@ -186,14 +186,14 @@ def main():
         for i, id in enumerate(env.obj_ids['rigid']):
             pos, orn = p.getBasePositionAndOrientation(id)
             output[-1].append({
-                'id': id,
                 'pos': pos,
                 'orn': orn,
-                'type': p.getBodyInfo(id)[1].decode('UTF-8'),
                 'shape_code': int(shape_codes[i])
             })
     with open(args.output_file, "w") as f:
         json.dump(output, f, indent=4)
+    with open("shape_codes_to_filename.json", "w") as f:
+        json.dump({i: np.sort(os.listdir(data_dir))[i] for i in range(len(np.sort(os.listdir(data_dir))))}, f, indent=4)
 
 if __name__ == '__main__':
   main()
