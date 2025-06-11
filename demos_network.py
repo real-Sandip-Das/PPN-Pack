@@ -186,8 +186,8 @@ def main():
         for i, id in enumerate(env.obj_ids['rigid']):
             pos, orn = p.getBasePositionAndOrientation(id)
             output[-1].append({
-                'pos': pos,
-                'orn': orn,
+                'position': pos,
+                'orientation': orn,
                 'shape_code': int(shape_codes[i])
             })
     with open(args.output_file, "w") as f:
