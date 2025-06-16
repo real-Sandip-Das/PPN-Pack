@@ -16,6 +16,7 @@
 #!/usr/bin/env python
 """Data collection script."""
 
+import math
 import argparse
 import os
 import json
@@ -185,9 +186,10 @@ def main():
         output.append([])
         for i, id in enumerate(env.obj_ids['rigid']):
             pos, orn = p.getBasePositionAndOrientation(id)
+            norm = math.sqrt(sum(x*x for x in orn))
             output[-1].append({
                 'position': pos,
-                'orientation': orn,
+                'orientation': [x/norm for x in orn],
                 'shape_code': int(shape_codes[i])
             })
     with open(args.output_file, "w") as f:
