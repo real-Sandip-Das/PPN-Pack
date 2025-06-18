@@ -182,6 +182,33 @@ def main():
         print ('average_success_cnt', avg_success_cnt/(shape_code_idx+1-args.case_cnt*args.split)*args.case_cnt)
         print ('average_time_per_obj', avg_time/(shape_code_idx+1-args.case_cnt*args.split)*args.case_cnt)
         print ('average_volume', avg_volume/(shape_code_idx+1-args.case_cnt*args.split)*args.case_cnt)
+        # STABILITY_LINEAR_THRESHOLD = 1e-3   # Adjust as needed
+        # STABILITY_ANGULAR_THRESHOLD = 1e-3  # Adjust as needed
+        # STABILITY_STEPS = 3                # Number of stable steps before stopping
+
+        # stable_counter = 0
+        # while True:
+        #     for i in range(10000): p.stepSimulation()
+        #     while True:
+        #         if stable_counter >= STABILITY_STEPS:
+        #             break
+        #         p.stepSimulation()
+        #         all_stable = True
+        #         for body_id in range(p.getNumBodies()):
+        #             linear_vel, angular_vel = p.getBaseVelocity(body_id)
+        #             if (any(abs(v) > STABILITY_LINEAR_THRESHOLD for v in linear_vel) or
+        #                 any(abs(v) > STABILITY_ANGULAR_THRESHOLD for v in angular_vel)):
+        #                 all_stable = False
+        #                 break
+        #         if all_stable:
+        #             stable_counter += 1
+        #         else:
+        #             stable_counter = 0
+        #             break
+        #     print(stable_counter)
+        #     if stable_counter >= STABILITY_STEPS:
+        #         print("Simulation is stable.")
+        #         break
 
         output.append([])
         for i, id in enumerate(env.obj_ids['rigid']):
@@ -190,7 +217,7 @@ def main():
             output[-1].append({
                 'position': pos,
                 'orientation': [x/norm for x in orn],
-                'shape_code': int(shape_codes[i])
+                'shape_code': int(train_data_save_dict[i])
             })
     with open(args.output_file, "w") as f:
         json.dump(output, f, indent=4)

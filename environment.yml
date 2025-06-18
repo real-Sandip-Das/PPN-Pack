@@ -30,6 +30,7 @@ dependencies:
   - mkl-service
   - mkl_fft
   - mkl_random
+  - mujoco-python
   - ncurses
   - ninja
   - ninja-base
