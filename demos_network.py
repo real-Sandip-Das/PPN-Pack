@@ -215,7 +215,7 @@ def main():
             pos, orn = p.getBasePositionAndOrientation(id)
             norm = math.sqrt(sum(x*x for x in orn))
             output[-1].append({
-                'position': pos,
+                'position': [(pos[0]-0.5)/0.34+0.5, pos[1]/0.34+0.5, (pos[2]-0.17)/0.34+0.5],
                 'orientation': [x/norm for x in orn],
                 'shape_code': int(train_data_save_dict[i])
             })
