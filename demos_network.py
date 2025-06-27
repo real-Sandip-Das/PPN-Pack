@@ -91,6 +91,7 @@ def main():
     parser.add_argument('--sdf_remain_terms', default='1234')
     parser.add_argument('--testing_shape_codes_file', default='sequential_testing_shape_codes_96_type_2000_80_num_rand.npy')
     parser.add_argument('--output_file', default='output.json')
+    parser.add_argument('--shape_codes_to_filename_file', default='shape_codes_to_filename.json')
     args = parser.parse_args()
 
     # Initialize environment and task.
@@ -221,7 +222,7 @@ def main():
             })
     with open(args.output_file, "w") as f:
         json.dump(output, f, indent=4)
-    with open("shape_codes_to_filename.json", "w") as f:
+    with open(args.shape_codes_to_filename_file, "w") as f:
         json.dump({i: np.sort(os.listdir(data_dir))[i] for i in range(len(np.sort(os.listdir(data_dir))))}, f, indent=4)
 
 if __name__ == '__main__':
